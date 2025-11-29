@@ -1,0 +1,15 @@
+// code fix schemaDeprecatedTypes_replaceWithValidDate  output for range 99 - 103
+import { Schema } from "effect"
+
+const s1 = Schema.Number
+const s2 = Schema.Date
+
+import { Number, ValidDate } from "effect/Schema"
+
+const s3 = Number
+const s4 = Date
+
+import * as S from "effect/Schema"
+
+const s5 = S.Number
+const s6 = S.Date
