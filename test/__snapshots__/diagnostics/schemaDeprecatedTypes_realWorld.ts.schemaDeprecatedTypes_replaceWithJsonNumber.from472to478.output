@@ -1,0 +1,23 @@
+// code fix schemaDeprecatedTypes_replaceWithJsonNumber  output for range 472 - 478
+// @effect-diagnostics schemaDeprecatedTypes:warning
+import { Schema } from "effect"
+
+// Struct property
+const User = Schema.Struct({
+  id: Schema.Number,
+  createdAt: Schema.Date
+})
+
+// Class property
+class Product extends Schema.Class<Product>("Product")({
+  price: Schema.Number,
+  releaseDate: Schema.Date
+}) {}
+
+// Union member
+const ID = Schema.Union(Schema.Number, Schema.String)
+
+// Function argument
+const validate = (s: Schema.Schema<any>) => {}
+validate(Schema.JsonNumber)
+validate(Schema.Date)
