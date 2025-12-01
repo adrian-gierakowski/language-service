@@ -1,3 +1,4 @@
+// code fix schemaDeprecatedTypes_replaceWithJsonNumber  output for range 265 - 271
 // @effect-diagnostics schemaDeprecatedTypes:warning
 import { Schema } from "effect"
 
@@ -11,7 +12,7 @@ const s4 = Date
 
 import * as S from "effect/Schema"
 
-const s5 = S.Number
+const s5 = S.JsonNumber
 const s6 = S.Date
 
 const N = Schema.Number

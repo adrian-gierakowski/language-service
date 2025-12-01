@@ -1,3 +1,4 @@
+// code fix schemaDeprecatedTypes_replaceWithValidDate  output for range 210 - 214
 // @effect-diagnostics schemaDeprecatedTypes:warning
 import { Schema } from "effect"
 
@@ -7,7 +8,7 @@ const s2 = Schema.Date
 import { Number, Date } from "effect/Schema"
 
 const s3 = Number
-const s4 = Date
+const s4 = ValidDate
 
 import * as S from "effect/Schema"
 

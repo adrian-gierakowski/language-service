@@ -1,6 +1,8 @@
+// code fix schemaDeprecatedTypes_skipNextLine  output for range 104 - 110
 // @effect-diagnostics schemaDeprecatedTypes:warning
 import { Schema } from "effect"
 
+// @effect-diagnostics-next-line schemaDeprecatedTypes:off
 const s1 = Schema.Number
 const s2 = Schema.Date
 

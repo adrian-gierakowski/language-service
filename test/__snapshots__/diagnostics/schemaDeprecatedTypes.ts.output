@@ -1,23 +1,26 @@
 Number
-3:18 - 3:24 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)
+4:18 - 4:24 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)
 
 Date
-4:18 - 4:22 | 0 | Schema.Date is deprecated. Use Schema.ValidDate instead.    effect(schemaDeprecatedTypes)
+5:18 - 5:22 | 0 | Schema.Date is deprecated. Use Schema.ValidDate instead.    effect(schemaDeprecatedTypes)
 
 Number
-6:9 - 6:15 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)
+7:9 - 7:15 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)
 
 Date
-6:17 - 6:21 | 0 | Schema.Date is deprecated. Use Schema.ValidDate instead.    effect(schemaDeprecatedTypes)
+7:17 - 7:21 | 0 | Schema.Date is deprecated. Use Schema.ValidDate instead.    effect(schemaDeprecatedTypes)
 
 Number
-8:11 - 8:17 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)
+9:11 - 9:17 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)
 
 Date
-9:11 - 9:15 | 0 | Schema.Date is deprecated. Use Schema.ValidDate instead.    effect(schemaDeprecatedTypes)
+10:11 - 10:15 | 0 | Schema.Date is deprecated. Use Schema.ValidDate instead.    effect(schemaDeprecatedTypes)
 
 Number
-13:13 - 13:19 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)
+14:13 - 14:19 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)
 
 Date
-14:13 - 14:17 | 0 | Schema.Date is deprecated. Use Schema.ValidDate instead.    effect(schemaDeprecatedTypes)
+15:13 - 15:17 | 0 | Schema.Date is deprecated. Use Schema.ValidDate instead.    effect(schemaDeprecatedTypes)
+
+Number
+17:17 - 17:23 | 0 | Schema.Number is deprecated. Use Schema.JsonNumber instead.    effect(schemaDeprecatedTypes)

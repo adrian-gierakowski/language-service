@@ -10,7 +10,7 @@ import * as TypeScriptApi from "../core/TypeScriptApi.js"
 export const schemaDeprecatedTypes = LSP.createDiagnostic({
   name: "schemaDeprecatedTypes",
   code: 34,
-  severity: "warning",
+  severity: "off",
   apply: Nano.fn("schemaDeprecatedTypes.apply")(function*(sourceFile, report) {
     const ts = yield* Nano.service(TypeScriptApi.TypeScriptApi)
     const typeParser = yield* Nano.service(TypeParser.TypeParser)
@@ -26,33 +26,34 @@ export const schemaDeprecatedTypes = LSP.createDiagnostic({
       const node = nodeToVisit.shift()!
 
       if (ts.isPropertyAccessExpression(node)) {
-        if (node.name.text === "Number") {
-          const isSchemaNumber = yield* pipe(
-            typeParser.isNodeReferenceToEffectSchemaModuleApi("Number")(node),
-            Nano.option,
-            Nano.map(Option.isSome)
-          )
-          if (isSchemaNumber) {
-            report({
-              location: node.name,
-              messageText: "Schema.Number is deprecated. Use Schema.JsonNumber instead.",
-              fixes: [{
-                fixName: "schemaDeprecatedTypes_replaceWithJsonNumber",
-                description: "Replace with Schema.JsonNumber",
-                apply: Nano.gen(function*() {
-                  const changeTracker = yield* Nano.service(TypeScriptApi.ChangeTracker)
-                  changeTracker.replaceNode(sourceFile, node.name, ts.factory.createIdentifier("JsonNumber"))
-                })
-              }]
-            })
-          }
-        }
-        if (node.name.text === "Date") {
+        // Handle Schema.Number
+        const isSchemaNumber = yield* pipe(
+          typeParser.isNodeReferenceToEffectSchemaModuleApi("Number")(node),
+          Nano.option,
+          Nano.map(Option.isSome)
+        )
+
+        if (isSchemaNumber) {
+          report({
+            location: node.name,
+            messageText: "Schema.Number is deprecated. Use Schema.JsonNumber instead.",
+            fixes: [{
+              fixName: "schemaDeprecatedTypes_replaceWithJsonNumber",
+              description: "Replace with Schema.JsonNumber",
+              apply: Nano.gen(function*() {
+                const changeTracker = yield* Nano.service(TypeScriptApi.ChangeTracker)
+                changeTracker.replaceNode(sourceFile, node.name, ts.factory.createIdentifier("JsonNumber"))
+              })
+            }]
+          })
+        } else {
+          // Handle Schema.Date
           const isSchemaDate = yield* pipe(
             typeParser.isNodeReferenceToEffectSchemaModuleApi("Date")(node),
             Nano.option,
             Nano.map(Option.isSome)
           )
+
           if (isSchemaDate) {
             report({
               location: node.name,
@@ -69,38 +70,38 @@ export const schemaDeprecatedTypes = LSP.createDiagnostic({
           }
         }
       } else if (ts.isIdentifier(node)) {
-        // Skip if parent is PropertyAccessExpression and this is the name
+        // Skip if parent is PropertyAccessExpression and this is the name (handled above)
         if (ts.isPropertyAccessExpression(node.parent) && node.parent.name === node) {
           // continue
         } else {
-          if (node.text === "Number") {
-             const isSchemaNumber = yield* pipe(
-              typeParser.isNodeReferenceToEffectSchemaModuleApi("Number")(node),
-              Nano.option,
-              Nano.map(Option.isSome)
-            )
+          // Handle Number identifier
+          const isSchemaNumber = yield* pipe(
+            typeParser.isNodeReferenceToEffectSchemaModuleApi("Number")(node),
+            Nano.option,
+            Nano.map(Option.isSome)
+          )
 
-            if (isSchemaNumber) {
-              report({
-                location: node,
-                messageText: "Schema.Number is deprecated. Use Schema.JsonNumber instead.",
-                fixes: [{
-                  fixName: "schemaDeprecatedTypes_replaceWithJsonNumber",
-                  description: "Replace with Schema.JsonNumber",
-                  apply: Nano.gen(function*() {
-                    const changeTracker = yield* Nano.service(TypeScriptApi.ChangeTracker)
-                    changeTracker.replaceNode(sourceFile, node, ts.factory.createIdentifier("JsonNumber"))
-                  })
-                }]
-              })
-            }
-          }
-          if (node.text === "Date") {
+          if (isSchemaNumber) {
+            report({
+              location: node,
+              messageText: "Schema.Number is deprecated. Use Schema.JsonNumber instead.",
+              fixes: [{
+                fixName: "schemaDeprecatedTypes_replaceWithJsonNumber",
+                description: "Replace with Schema.JsonNumber",
+                apply: Nano.gen(function*() {
+                  const changeTracker = yield* Nano.service(TypeScriptApi.ChangeTracker)
+                  changeTracker.replaceNode(sourceFile, node, ts.factory.createIdentifier("JsonNumber"))
+                })
+              }]
+            })
+          } else {
+            // Handle Date identifier
             const isSchemaDate = yield* pipe(
               typeParser.isNodeReferenceToEffectSchemaModuleApi("Date")(node),
               Nano.option,
               Nano.map(Option.isSome)
             )
+
             if (isSchemaDate) {
               report({
                 location: node,
