@@ -25,7 +25,7 @@ export const schemaDeprecatedTypes = LSP.createDiagnostic({
     while (nodeToVisit.length > 0) {
       const node = nodeToVisit.shift()!
 
-      if (ts.isPropertyAccessExpression(node)) {
+      if (ts.isIdentifier(node)) {
         // Handle Schema.Number
         const isSchemaNumber = yield* pipe(
           typeParser.isNodeReferenceToEffectSchemaModuleApi("Number")(node),
@@ -35,14 +35,14 @@ export const schemaDeprecatedTypes = LSP.createDiagnostic({
 
         if (isSchemaNumber) {
           report({
-            location: node.name,
+            location: node,
             messageText: "Schema.Number is deprecated. Use Schema.JsonNumber instead.",
             fixes: [{
               fixName: "schemaDeprecatedTypes_replaceWithJsonNumber",
               description: "Replace with Schema.JsonNumber",
               apply: Nano.gen(function*() {
                 const changeTracker = yield* Nano.service(TypeScriptApi.ChangeTracker)
-                changeTracker.replaceNode(sourceFile, node.name, ts.factory.createIdentifier("JsonNumber"))
+                changeTracker.replaceNode(sourceFile, node, ts.factory.createIdentifier("JsonNumber"))
               })
             }]
           })
@@ -56,66 +56,17 @@ export const schemaDeprecatedTypes = LSP.createDiagnostic({
 
           if (isSchemaDate) {
             report({
-              location: node.name,
+              location: node,
               messageText: "Schema.Date is deprecated. Use Schema.ValidDate instead.",
               fixes: [{
                 fixName: "schemaDeprecatedTypes_replaceWithValidDate",
                 description: "Replace with Schema.ValidDate",
                 apply: Nano.gen(function*() {
                   const changeTracker = yield* Nano.service(TypeScriptApi.ChangeTracker)
-                  changeTracker.replaceNode(sourceFile, node.name, ts.factory.createIdentifier("ValidDate"))
+                  changeTracker.replaceNode(sourceFile, node, ts.factory.createIdentifier("ValidDate"))
                 })
               }]
             })
-          }
-        }
-      } else if (ts.isIdentifier(node)) {
-        // Skip if parent is PropertyAccessExpression and this is the name (handled above)
-        if (ts.isPropertyAccessExpression(node.parent) && node.parent.name === node) {
-          // continue
-        } else {
-          // Handle Number identifier
-          const isSchemaNumber = yield* pipe(
-            typeParser.isNodeReferenceToEffectSchemaModuleApi("Number")(node),
-            Nano.option,
-            Nano.map(Option.isSome)
-          )
-
-          if (isSchemaNumber) {
-            report({
-              location: node,
-              messageText: "Schema.Number is deprecated. Use Schema.JsonNumber instead.",
-              fixes: [{
-                fixName: "schemaDeprecatedTypes_replaceWithJsonNumber",
-                description: "Replace with Schema.JsonNumber",
-                apply: Nano.gen(function*() {
-                  const changeTracker = yield* Nano.service(TypeScriptApi.ChangeTracker)
-                  changeTracker.replaceNode(sourceFile, node, ts.factory.createIdentifier("JsonNumber"))
-                })
-              }]
-            })
-          } else {
-            // Handle Date identifier
-            const isSchemaDate = yield* pipe(
-              typeParser.isNodeReferenceToEffectSchemaModuleApi("Date")(node),
-              Nano.option,
-              Nano.map(Option.isSome)
-            )
-
-            if (isSchemaDate) {
-              report({
-                location: node,
-                messageText: "Schema.Date is deprecated. Use Schema.ValidDate instead.",
-                fixes: [{
-                  fixName: "schemaDeprecatedTypes_replaceWithValidDate",
-                  description: "Replace with Schema.ValidDate",
-                  apply: Nano.gen(function*() {
-                    const changeTracker = yield* Nano.service(TypeScriptApi.ChangeTracker)
-                    changeTracker.replaceNode(sourceFile, node, ts.factory.createIdentifier("ValidDate"))
-                  })
-                }]
-              })
-            }
           }
         }
       }
