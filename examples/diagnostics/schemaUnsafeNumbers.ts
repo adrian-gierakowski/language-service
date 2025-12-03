@@ -1,0 +1,15 @@
+// @effect-diagnostics schemaUnsafeNumbers:warning
+import * as Schema from "effect/Schema"
+
+const s1 = Schema.Number
+const s2 = Schema.Positive
+const s3 = Schema.NonNegative
+const s4 = Schema.Negative
+const s5 = Schema.NonPositive
+
+// Complex scenario
+const mySchema = Schema.Struct({
+    prop1: Schema.Number,
+    prop2: Schema.Positive,
+    prop3: Schema.String
+})

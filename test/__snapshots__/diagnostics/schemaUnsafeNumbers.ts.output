@@ -1,0 +1,20 @@
+Schema.Number
+4:11 - 4:24 | 0 | Schema.Number is unsafe because: allows both NaN and +- Infinity.    effect(schemaUnsafeNumbers)
+
+Schema.Positive
+5:11 - 5:26 | 0 | Schema.Positive is unsafe because: allows Infinity.    effect(schemaUnsafeNumbers)
+
+Schema.NonNegative
+6:11 - 6:29 | 0 | Schema.NonNegative is unsafe because: allows Infinity.    effect(schemaUnsafeNumbers)
+
+Schema.Negative
+7:11 - 7:26 | 0 | Schema.Negative is unsafe because: allows -Infinity.    effect(schemaUnsafeNumbers)
+
+Schema.NonPositive
+8:11 - 8:29 | 0 | Schema.NonPositive is unsafe because: allows -Infinity.    effect(schemaUnsafeNumbers)
+
+Schema.Number
+12:11 - 12:24 | 0 | Schema.Number is unsafe because: allows both NaN and +- Infinity.    effect(schemaUnsafeNumbers)
+
+Schema.Positive
+13:11 - 13:26 | 0 | Schema.Positive is unsafe because: allows Infinity.    effect(schemaUnsafeNumbers)
