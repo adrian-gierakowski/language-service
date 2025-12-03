@@ -1,5 +1,4 @@
 import { pipe } from "effect"
-import * as Array from "effect/Array"
 import * as Option from "effect/Option"
 import type ts from "typescript"
 import * as LSP from "../core/LSP.js"
