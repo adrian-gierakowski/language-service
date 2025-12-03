@@ -1,5 +1,5 @@
 // @effect-diagnostics anyUnknownInErrorContext:warning
-import { Effect } from "effect"
+import { Effect, Layer } from "effect"
 
 export const withUnknownContext = Effect.gen(function*() {
   yield* Effect.context<unknown>()
@@ -33,3 +33,7 @@ export const thisIsAlsoFine: Effect.Effect<void, number, any> = Effect.succeed(4
 export class Test {
   a: Effect.Effect<void, number, any> = Effect.succeed(42)
 }
+
+const effectUnkown = Effect.context<unknown>()
+const layerUnknown = Layer.effectDiscard(effectUnkown)
+export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))

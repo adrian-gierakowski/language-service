@@ -38,18 +38,13 @@ export const annotate = LSP.createCodegen({
         for (const variableDeclaration of variableDeclarations) {
           if (!variableDeclaration.initializer) continue
           const initializerType = typeChecker.getTypeAtLocation(variableDeclaration.initializer)
+          const enclosingNode = ts.findAncestor(variableDeclaration, (_) => tsUtils.isDeclarationKind(_.kind)) ||
+            sourceFile
           const initializerTypeNode = Option.fromNullable(typeCheckerUtils.typeToSimplifiedTypeNode(
             initializerType,
-            node,
-            ts.NodeBuilderFlags.NoTruncation
+            enclosingNode,
+            ts.NodeBuilderFlags.NoTruncation | ts.NodeBuilderFlags.IgnoreErrors
           )).pipe(
-            Option.orElse(() =>
-              Option.fromNullable(typeCheckerUtils.typeToSimplifiedTypeNode(
-                initializerType,
-                undefined,
-                ts.NodeBuilderFlags.NoTruncation
-              ))
-            ),
             Option.getOrUndefined
           )
           if (!initializerTypeNode) continue

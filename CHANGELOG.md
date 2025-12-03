@@ -1,5 +1,92 @@
 # @effect/language-service
 
+## 0.58.4
+
+### Patch Changes
+
+- [#515](https://github.com/Effect-TS/language-service/pull/515) [`b77b7e5`](https://github.com/Effect-TS/language-service/commit/b77b7e5f3492b5d1262d26eaa5a695e7f14e6392) Thanks [@mattiamanzati](https://github.com/mattiamanzati)! - Fix toggle type annotation and toggle return type annotation refactors to handle unnamed/unresolved types
+
+  The refactors now use `ts.NodeBuilderFlags.IgnoreErrors` flag when generating type annotations, allowing them to work correctly with types that have errors or are unnamed (e.g., `Schema.Struct({ ... }).make`). This prevents the refactors from failing when the type contains unresolved references or complex type expressions.
+
+- [#514](https://github.com/Effect-TS/language-service/pull/514) [`ddabde2`](https://github.com/Effect-TS/language-service/commit/ddabde26021d9982a8ea02d6fb96414c39c3fb57) Thanks [@mattiamanzati](https://github.com/mattiamanzati)! - Fix symbol resolution for aliased module exports. The TypeParser now correctly handles cases where symbols are exported from a module with an alias, improving the accuracy of type analysis for Effect modules.
+
+## 0.58.3
+
+### Patch Changes
+
+- [#512](https://github.com/Effect-TS/language-service/pull/512) [`e3dc38e`](https://github.com/Effect-TS/language-service/commit/e3dc38e9318324e8c733aeee60a186a34ea3caa0) Thanks [@mattiamanzati](https://github.com/mattiamanzati)! - Fix type annotation context resolution in toggle refactors. When toggling type annotations or return type annotations, the refactors now correctly use the enclosing declaration node as context instead of the local node, which improves type resolution and prevents issues with type parameter scope.
+
+## 0.58.2
+
+### Patch Changes
+
+- [#510](https://github.com/Effect-TS/language-service/pull/510) [`9064174`](https://github.com/Effect-TS/language-service/commit/90641746039377a60d4e2a6048bfc509518ebd8a) Thanks [@mattiamanzati](https://github.com/mattiamanzati)! - Extend `anyUnknownInErrorContext` diagnostic to also check Layer types
+
+  The `anyUnknownInErrorContext` diagnostic now checks both Effect and Layer types for `any` or `unknown` in their error and requirements channels. This helps catch more cases where type information is being lost in your Effect applications.
+
+  Example:
+
+  ```typescript
+  const effectUnknown = Effect.context<unknown>();
+  const layerUnknown = Layer.effectDiscard(effectUnknown);
+  // Now reports: This has unknown in the requirements channel which is not recommended.
+  ```
+
+  The diagnostic also now skips explicit Layer type annotations to avoid false positives on intentional type declarations.
+
+## 0.58.1
+
+### Patch Changes
+
+- [#508](https://github.com/Effect-TS/language-service/pull/508) [`1a4446c`](https://github.com/Effect-TS/language-service/commit/1a4446ce115c3e89925ecd7ed3613100605cc798) Thanks [@mattiamanzati](https://github.com/mattiamanzati)! - Fix `anyUnknownInErrorContext` diagnostic to exclude JSX elements from reporting false positives. The diagnostic will no longer incorrectly flag JSX tag names, self-closing elements, opening/closing elements, and attribute names.
+
+  Example:
+
+  ```tsx
+  // Before: Would incorrectly report diagnostic on <MyComponent />
+  const element = <MyComponent />;
+
+  // After: No diagnostic, JSX elements are properly excluded
+  const element = <MyComponent />;
+  ```
+
+## 0.58.0
+
+### Minor Changes
+
+- [#505](https://github.com/Effect-TS/language-service/pull/505) [`31cff49`](https://github.com/Effect-TS/language-service/commit/31cff498b6a3207eabe5609f677b202245f53967) Thanks [@clayroach](https://github.com/clayroach)! - Enhance `diagnostics` CLI command with new options for CI/CD integration and tooling:
+
+  - **`--format`**: Output format selection (`json`, `pretty`, `text`, `github-actions`)
+
+    - `json`: Machine-readable JSON output with structured diagnostics and summary
+    - `pretty`: Colored output with context (default, original behavior)
+    - `text`: Plain text output without colors
+    - `github-actions`: GitHub Actions workflow commands for inline PR annotations
+
+  - **`--strict`**: Treat warnings as errors (affects exit code)
+
+  - **`--severity`**: Filter diagnostics by severity level (comma-separated: `error`, `warning`, `message`)
+
+  - **Exit codes**: Returns exit code 1 when errors are found (or warnings in strict mode)
+
+  Example usage:
+
+  ```bash
+  # JSON output for CI/CD pipelines
+  effect-language-service diagnostics --project tsconfig.json --format json
+
+  # GitHub Actions with inline annotations
+  effect-language-service diagnostics --project tsconfig.json --format github-actions
+
+  # Strict mode for CI (fail on warnings)
+  effect-language-service diagnostics --project tsconfig.json --strict
+
+  # Only show errors
+  effect-language-service diagnostics --project tsconfig.json --severity error
+  ```
+
+  Closes Effect-TS/effect #5180.
+
 ## 0.57.1
 
 ### Patch Changes
